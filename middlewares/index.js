@@ -1,5 +1,6 @@
 module.exports = {
   gm: require('./gm'),
   gallery: require('./gallery'),
-  cachecontrol: require('./cachecontrol')
+  cachecontrol: require('./cachecontrol'),
+  upload: require('./upload')
 };
