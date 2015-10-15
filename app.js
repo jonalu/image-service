@@ -1,44 +1,27 @@
 var express = require('express'),
-    gm = require('gm'),
     multer = require('multer'),
     app = express(),
-    template = require('es6-template-strings');
+    router = express.Router(),
+    middlewares = require('./middlewares');
 
 app.set('view engine', 'jade');
+app.use('/assets', express.static(__dirname + '/public'));
 
 var upload = multer({
-  dest: __dirname + '/images/'
+  dest: process.env.IMAGE_DIR || __dirname + '/images'
 });
 
-app.get('/', function(req, res, next) {
-  res.render('upload');
-});
+app.route('/')
+  .get(function(req, res, next) {
+    res.render('upload');
+  })
+  .post(upload.single('photo'), function(req, res, next) {
+    res.redirect('/' + req.file.filename);
+  });
 
-app.post('/', upload.single('photo'), function(req, res, next) {
-  res.redirect('/' + req.file.filename);
-});
+app.get('/gallery', middlewares.gallery);
 
-app.get('/:image', function (req, res, next) {
-  gm(template('./images/${image}', { image: req.params.image }))
-    .format(function(err, type){
-      if(!err){
-        res.set('Content-Type', template('image/${imageType}', { imageType: type.toLowerCase() }));
-        res.set('Cache-Control', 'public, max-age=120000');
-      }
-      return this;
-    })
-    .resize(req.query.w, req.query.h)
-    .autoOrient()
-    .stream(function (err, stdout, stderr) {
-      if(err) {
-        res.status(404).send('Vi kan desverre ikkje finne bildet du etterspurde');
-      } else {
-        stdout.pipe(res);
-        stdout.on('error', function(err) {
-          res.status(503).send('En feil oppstod under generering av bildet');
-        });
-      }
-    });
-});
+app.get('/:image', middlewares.gm);
+
 
 app.listen(process.env.PORT || 3005);
