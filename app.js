@@ -5,6 +5,7 @@ var express = require('express'),
     middlewares = require('./middlewares');
 
 app.set('view engine', 'jade');
+
 app.use('/assets', express.static(__dirname + '/public'));
 
 var upload = multer({
@@ -21,7 +22,7 @@ app.route('/')
 
 app.get('/gallery', middlewares.gallery);
 
-app.get('/:image', middlewares.gm);
+app.get('/:image', middlewares.cachecontrol, middlewares.gm);
 
 
 app.listen(process.env.PORT || 3005);

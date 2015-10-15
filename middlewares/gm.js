@@ -6,7 +6,6 @@ module.exports = function (req, res, next) {
     .format(function(err, type){
       if(!err){
         res.set('Content-Type', template('image/${imageType}', { imageType: type.toLowerCase() }));
-        res.set('Cache-Control', 'public, max-age=120000');
       }
       return this;
     })
