@@ -6,6 +6,9 @@ var express = require('express'),
 app.set('view engine', 'jade');
 
 app.use('/assets', express.static(__dirname + '/public'));
+app.get('/ping',function(req, res, next) {
+  res.status(200).send('pong');
+});
 
 app.route('/')
   .get(function(req, res, next) { res.render('upload'); })
@@ -13,7 +16,7 @@ app.route('/')
     res.redirect('/' + req.file.filename);
   });
 
-app.get('/gallery', middlewares.gallery);
+app.get('/gallery', middlewares.cachecontrol, middlewares.gallery);
 app.get('/:image', middlewares.cachecontrol, middlewares.gm);
 
 app.listen(process.env.PORT || 3005);
