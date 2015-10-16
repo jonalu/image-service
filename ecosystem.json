@@ -9,11 +9,13 @@
     "cwd" : "/opt/node/apps/image-service/current",
     "env_production" : {
       "PORT" : "3005",
-      "NODE_ENV" : "production"
+      "NODE_ENV" : "production",
+      "IMAGE_DIR": "/opt/node/image-service-stored-images"
     },
     "env_stage" : {
       "PORT" : "3005",
-      "NODE_ENV" : "stage"
+      "NODE_ENV" : "stage",
+      "IMAGE_DIR": "/home/node/image-service-stored-images"
     }
   }],
   "deploy" : {
