@@ -16,7 +16,7 @@ app.route('/')
     res.redirect('/' + req.file.filename);
   });
 
-app.get('/gallery', middlewares.cachecontrol, middlewares.gallery);
+app.get('/gallery', middlewares.gallery);
 app.get('/:image', middlewares.cachecontrol, middlewares.gm);
 
 app.listen(process.env.PORT || 3005);
